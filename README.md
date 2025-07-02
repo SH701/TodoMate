@@ -17,7 +17,10 @@ React Native + Expo로 만든 카테고리 기반 To-Do 리스트 앱입니다.
 ---
 
 ## 📷 스크린샷
-![Demo](https://raw.githubusercontent.com/SH701/TodoMate/main/assets/images/demo.gif)
+
+![1](https://github.com/user-attachments/assets/e8e8e7f2-5d9e-4a99-87c1-4f262024cbb5)
+![2](https://github.com/user-attachments/assets/02d86673-09f9-4c1d-affc-b04bcb886ceb)
+![3](https://github.com/user-attachments/assets/c4ce1c64-d798-4885-8afc-da5a657d7491)
 
 ## 🚀 사용 기술
 
