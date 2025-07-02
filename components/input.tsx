@@ -1,4 +1,5 @@
 import { Modal, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { categoryPlaceholder } from '../constants/category';
 
 interface Props {
   visible: boolean;
@@ -22,7 +23,7 @@ export default function InputBar({ visible,onClose,onSubmit,text,onChangeText,th
       }}>
         <View style={{
           width: '90%',
-          backgroundColor: theme.bg,
+          backgroundColor: theme.input,
           padding: 20,
           borderRadius: 12,
         }}>
@@ -38,7 +39,7 @@ export default function InputBar({ visible,onClose,onSubmit,text,onChangeText,th
           <TextInput
             value={text}
             onChangeText={onChangeText}
-            placeholder={category ? 'What do you need to do?' : 'Where do you want to go?'}
+            placeholder={categoryPlaceholder[category]}
             placeholderTextColor={theme.placeholder}
             style={{
               backgroundColor: theme.toDoBg,

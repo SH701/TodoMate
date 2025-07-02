@@ -5,7 +5,8 @@ export const darktheme = {
   text: "#ffffff",
   placeholder: "#999999",
   days:"#f0f0f0",
-  bar:"#FAFCFE"
+  bar:"#FAFCFE",
+  input:"#0D1117",
 };
 
 export const lighttheme = {
@@ -15,5 +16,6 @@ export const lighttheme = {
   text: "#000000",
   placeholder: "#666666",
   days:"#5d5d5d",
-  bar:"#000000"
+  bar:"#000000",
+  input:"#F6F8FA"
 };
