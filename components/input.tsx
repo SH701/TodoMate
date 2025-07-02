@@ -6,12 +6,12 @@ interface Props {
   onSubmit: () => void;
   text: string;
   onChangeText: (text: string) => void;
-  working: boolean;
   theme: any;
   styles: any;
+  category:string;
 }
 
-export default function InputBar({ visible,onClose,onSubmit,text,onChangeText,working,theme,styles,}: Props) {
+export default function InputBar({ visible,onClose,onSubmit,text,onChangeText,theme,category}: Props) {
   return (
     <Modal visible={visible} transparent animationType="slide">
       <View style={{
@@ -32,13 +32,13 @@ export default function InputBar({ visible,onClose,onSubmit,text,onChangeText,wo
             marginBottom: 10,
             fontWeight: 'bold',
           }}>
-            {working ? 'Add a Work Task' : 'Add a Travel Plan'}
+            {`Add a ${category} Task`}
           </Text>
 
           <TextInput
             value={text}
             onChangeText={onChangeText}
-            placeholder={working ? 'What do you need to do?' : 'Where do you want to go?'}
+            placeholder={category ? 'What do you need to do?' : 'Where do you want to go?'}
             placeholderTextColor={theme.placeholder}
             style={{
               backgroundColor: theme.toDoBg,

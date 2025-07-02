@@ -9,9 +9,10 @@ export const appStyles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     marginTop: 100,
+    marginBottom:20
   },
   btn: {
-    fontSize: 38,
+    fontSize: 30,
     fontWeight: '600',
   },
   input: {
@@ -24,9 +25,7 @@ export const appStyles = StyleSheet.create({
     fontSize: 18,
   },
   mid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     marginVertical: 10,
     paddingHorizontal: 20,
   },

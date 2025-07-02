@@ -3,26 +3,27 @@ import { View, ScrollView, Text,Alert, TouchableOpacity } from 'react-native';
 import { appStyles } from './styles/appStyles';
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { darktheme, lighttheme } from './color';
+import { darktheme,lighttheme } from './constants/color';
 import Header from './components/header';
 import InputBar from './components/input';
 import ActionBar from './components/actionbar';
 import ToDoItem from './components/todoitem';
 import Bar from './components/bar';
+import {categories, type Category } from './constants/category';
 
 type ToDo = {
   [key: string]: {
     text: string;
-    working: boolean;
+    category: Category;
     done?:boolean;
   };
 };
 
 const STORAGE_KEY = '@toDos';
-const MODE_KEY = '@mode';
+const CATEGORY_KEY = `@category`;
 
 export default function App() {
-  const [working, setWorking] = useState(true);
+  const [category, setCategory] = useState<Category>("Work");
   const [text, setText] = useState('');
   const [toDos, setToDos] = useState<ToDo>({});
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -30,16 +31,34 @@ export default function App() {
   const [color, setColor] = useState<'light' | 'dark'>('light');
   const theme = color === 'dark' ? darktheme : lighttheme;
   const filteredToDos = Object.entries(toDos)
-    .filter(([_, todo]) => todo.working === working)
+    .filter(([_, todo]) => todo.category  === category )
     .sort((a, b) => Number(b[0]) - Number(a[0]));
   const donecount = filteredToDos.filter(([_, todo]) => todo.done).length;
   const totalcount = filteredToDos.length
   const percent = totalcount ===0 ? 0:Math.round((donecount/totalcount)*100)
-
   const toggle = () => setColor((prev) => (prev === 'light' ? 'dark' : 'light'));
-  const travel = () => setWorking(false);
-  const work = () => setWorking(true);
   const onChangeText = (payload: string) => setText(payload);
+  const loadToDos = async () => {
+  try {
+    const s = await AsyncStorage.getItem(STORAGE_KEY);
+    if (s) setToDos(JSON.parse(s)); 
+  } catch (error) {
+    console.log('Failed to load todos:', error);
+  }
+};
+  useEffect(()=>{
+    const init = async()=>{
+      const savedcategory = await AsyncStorage.getItem(CATEGORY_KEY);
+      if(savedcategory && categories.includes(savedcategory as Category)){
+        setCategory(savedcategory as Category)
+      }
+      await(loadToDos)
+    }
+    init();
+  },[])
+  useEffect(() => {
+  AsyncStorage.setItem(CATEGORY_KEY, category);
+}, [category]);
 
   const savetoDos = async (value: ToDo) => {
     try {
@@ -49,47 +68,10 @@ export default function App() {
       console.log(error);
     }
   };
-  const savework = async()=>{
-    try{
-      setWorking(true)
-      await AsyncStorage.setItem(MODE_KEY,'work')
-    }catch(e){
-      console.log(e)
-    }
-  }
-  const savetravel = async () => {
-  try{
-    setWorking(false);
-    await AsyncStorage.setItem(MODE_KEY, 'travel');
-  }
-  catch(e){
-    console.log(e)
-  }
-};
 
-  const loadToDos = async () => {
-    try {
-      const s = await AsyncStorage.getItem(STORAGE_KEY);
-      if (s) setToDos(JSON.parse(s));
-    } catch (error) {
-      console.log('Failed to load todos:', error);
-    }
-  };
-  useEffect(()=>{
-    const loadMode = async() =>{
-      const saveMode = await AsyncStorage.getItem(MODE_KEY);
-      if(saveMode ==='travel'){
-        setWorking(false);
-      }else{
-        setWorking(true)
-      }
-    }
-    loadMode();
-    loadToDos();
-  },[])
   const addToDo = async () => {
     if (text === '') return;
-    const newToDos = { ...toDos, [Date.now()]: { text, working } };
+    const newToDos = { ...toDos, [Date.now()]: { text, category,done:false } };
     setToDos(newToDos);
     await savetoDos(newToDos);
     setText('');
@@ -119,7 +101,7 @@ export default function App() {
         style: 'destructive',
         onPress: async () => {
           const updated = Object.entries(toDos)
-            .filter(([_, todo]) => todo.working !== working)
+            .filter(([_, todo]) => todo.category !== category)
             .reduce((acc, [key, todo]) => {
               acc[key] = todo;
               return acc;
@@ -173,15 +155,15 @@ export default function App() {
   return (
     <View style={[appStyles.container, { backgroundColor: theme.bg }]}>      
       <StatusBar style={color === 'dark' ? 'light' : 'dark'} />
-      <Header working={working} work={work} travel={travel} theme={theme} styles={appStyles} />
+      <Header category={category} color={color} toggle={toggle} categories={categories} setCategory={setCategory} theme={theme} styles={appStyles} />
       <TouchableOpacity onPress={() => setModal(true)} style={[appStyles.add,{backgroundColor:theme.bar}]}>
        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: theme.bg, fontSize: 40, lineHeight: 42 }}>+</Text>
         </View>
     </TouchableOpacity>
-      <InputBar text={text} onChangeText={onChangeText} onSubmit={addToDo} working={working} theme={theme} styles={appStyles} visible={modal} onClose={()=>setModal(false)}/>
+      <InputBar text={text} category={category} onChangeText={onChangeText} onSubmit={addToDo} theme={theme} styles={appStyles} visible={modal} onClose={()=>setModal(false)}/>
       <Bar styles={appStyles} percent={percent} theme={theme}/>
-      <ActionBar color={color} toggle={toggle} onDeleteAll={totaldelete} theme={theme} styles={appStyles} />
+      <ActionBar  onDeleteAll={totaldelete} theme={theme} styles={appStyles} />
       <ScrollView>
         {filteredToDos.length === 0 ? (
           <Text style={{ color: theme.text, textAlign: 'center', marginTop: 150 }}>

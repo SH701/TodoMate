@@ -5,7 +5,7 @@ import {useState} from 'react'
 
 interface Props {
   id: string;
-  todo: { text: string; working: boolean,done?:boolean };
+  todo: { text: string; category: string,done?:boolean };
   theme: any;
   styles: any;
   onDelete: (key: string) => void;
@@ -33,7 +33,7 @@ export default function ToDoItem({ id, todo, theme, styles, onDelete,onEditPress
         </TouchableOpacity>
          
       </View>
-           {todo.working && <Todaylabel theme={theme} />}
+           {todo.category && <Todaylabel theme={theme} />}
       {option && (
         <View style={{flexDirection:'row',justifyContent:'flex-end', alignItems:'flex-end', marginTop: 8, gap: 12 }}>
           <TouchableOpacity onPress={() => onDelete(id)}>
