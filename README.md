@@ -18,9 +18,13 @@ React Native + Expo로 만든 카테고리 기반 To-Do 리스트 앱입니다.
 
 ## 📷 스크린샷
 
-![1](https://github.com/user-attachments/assets/e8e8e7f2-5d9e-4a99-87c1-4f262024cbb5)
-![2](https://github.com/user-attachments/assets/02d86673-09f9-4c1d-affc-b04bcb886ceb)
-![3](https://github.com/user-attachments/assets/c4ce1c64-d798-4885-8afc-da5a657d7491)
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5521d9b5-645e-4253-9c25-f99f280f9d8a" width="30%" />
+  <img src="https://github.com/user-attachments/assets/815350bb-efd1-4671-a04c-6d1acd0ace18" width="30%" />
+  <img src="https://github.com/user-attachments/assets/e383720f-54e0-4838-86b3-31e54fac87af" width="30%" />
+</p>
+
 
 ## 🚀 사용 기술
 
